@@ -2,6 +2,7 @@ import { ModelTrainType, UniModel, CocoDataset, ModelTrainArgsType } from '@pipc
 import * as path from 'path';
 
 const boa = require('@pipcook/boa');
+const { dict } = boa.builtins();
 
 const detectronModelDefine: ModelTrainType = async (data: CocoDataset, model: UniModel, args: ModelTrainArgsType): Promise<UniModel> => {
   let {
@@ -17,10 +18,10 @@ const detectronModelDefine: ModelTrainType = async (data: CocoDataset, model: Un
   const cfg = model.config;
 
   if (trainLoader) {
-    register_coco_instances("train_dataset", {}, data.trainAnnotationPath, path.join(data.trainAnnotationPath, '..'));
+    register_coco_instances("train_dataset", dict(), data.trainAnnotationPath, path.join(data.trainAnnotationPath, '..'));
     cfg.DATASETS.TRAIN = [ "train_dataset" ];
     if (validationLoader) {
-      register_coco_instances("val_dataset", {}, data.validationAnnotationPath, path.join(data.validationAnnotationPath, '..'));
+      register_coco_instances("val_dataset", dict(), data.validationAnnotationPath, path.join(data.validationAnnotationPath, '..'));
       cfg.DATASETS.TEST = [ "val_dataset" ];
     } else {
       cfg.DATASETS.TEST = [ "train_dataset" ];
